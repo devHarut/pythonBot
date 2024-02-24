@@ -1,9 +1,3 @@
-Notes for myself:
+This is a multi function Discord bot in python using PyCord.
 
-To Install the packages listed in the requirements.txt file run the following command:
-
-py -m pip install -r requirements.txt
-
-To run the discord bot run the following command:
-
-py -m main
+I will make a proper readme soon.
