@@ -53,12 +53,17 @@ class Moderation(commands.Cog):
             await ctx.respond(embed=embed)
 
     # Timeout Command
-    @bridge.bridge_command(description="Timeout another member")
+    @bridge.bridge_command(description="Timeout a member")
     @bridge.has_permissions(moderate_members=True)
     async def timeout(self, ctx, member:discord.Member, days:int=0, hours:int=0, minutes:int=0):
         duration = timedelta(minutes=minutes, hours=hours, days=days)
         if days == 0 and hours == 0 and minutes == 0:
             return await ctx.respond("Duration can't be 0 days, 0 hours, and 0 minutes!", ephemeral=True)
+        elif member.guild_permissions.administrator:
+            if member.bot:
+                pass
+            else:
+                return await ctx.respond(embed=discord.Embed(title="Failure", description="You can't timeout another admin", color=discord.Colour.red()))
         await member.timeout_for(duration)
         embed = discord.Embed(title="Success!", description=f"Successfully timed out '{member.mention}' for {days} days, {hours} hours, and {minutes} minutes", color=discord.Colour.green())
         await ctx.respond(embed=embed, ephemeral=True)
@@ -69,7 +74,7 @@ class Moderation(commands.Cog):
             pass
 
     # Purge Command
-    @bridge.bridge_command(description="Delete Messages")
+    @bridge.bridge_command(description="Delete multiple messages")
     @bridge.has_permissions(manage_messages=True)
     async def purge(Self, ctx, amount:int, member:discord.Member=None):
         if member !=None:
@@ -100,7 +105,6 @@ class Moderation(commands.Cog):
         except:
             embed = discord.Embed(title="Failure", description="Failed to unban member!", color=discord.Colour.red())
             await ctx.respond(embed=embed, ephemeral=True)
-
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

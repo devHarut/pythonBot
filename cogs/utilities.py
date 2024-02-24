@@ -10,20 +10,23 @@ class Utilities(commands.Cog):
     async def random(self, ctx):
         pass
 
+    # Random number generator
     @random.command(description="Generate a random number")
     async def number(self, ctx, lowernumber:int, uppernumber:int):
         number = random.randrange(lowernumber, uppernumber)
         await ctx.respond(f"Your random numbner in range of {lowernumber} and {uppernumber} is number {number}")
 
+    # Get a message's ID
     @discord.message_command()
     async def getmessageid(self, ctx, message:discord.Message):
         await ctx.respond(f"{message.id}", ephemeral=True)
 
+    # Get a user's ID
     @discord.user_command()
     async def getuserid(self, ctx, user:discord.User):
         await ctx.respond(f"{user.id}", ephemeral=True)
 
-    # Random Color is Work in progress at the moment.
+    # Generate a random color (Work In Progress)
     @random.command(description="Generate a random color!")
     async def color(self, ctx):
         await ctx.defer()
@@ -44,13 +47,14 @@ class Utilities(commands.Cog):
         embed.set_image(url=f"https://some-random-api.ml/canvas/misc/colorviewer?hex={color}")
         await ctx.respond(embed=embed)
 
-    @bridge.bridge_command(Description="See another member's avatar")
+    # View another user's avatar
+    @bridge.bridge_command(description="See another member's avatar")
     async def avatar(self, ctx, member:discord.Member=None):
-        if memeber == None:
+        if member == None:
             member = ctx.author
         embed = discord.Embed(title=f"{str(member)}'s avatar:", color=random.randrange(0, 0xffffff))
         embed.set_image(url=member.avatar.url)
-        await ctx.respond(embed.embed)
+        await ctx.respond(embed=embed)
 
 def setup(bot):
     bot.add_cog(Utilities(bot))
