@@ -106,5 +106,13 @@ class Moderation(commands.Cog):
             embed = discord.Embed(title="Failure", description="Failed to unban member!", color=discord.Colour.red())
             await ctx.respond(embed=embed, ephemeral=True)
 
+    # Nickname Command
+    @bridge.bridge_command(description="Change a member's nickname")
+    @bridge.has_permissions(moderate_members=True)
+    async def nickname(self, ctx, member:discord.Member, nick:str):
+        await member.edit(nick=nick)
+        await ctx.respond(f"Successfully changed the nickname of {member.mention}", ephemeral=True)
+
+
 def setup(bot):
     bot.add_cog(Moderation(bot))

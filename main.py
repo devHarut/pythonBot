@@ -18,7 +18,7 @@ class pythonBot(bridge.Bot):
     intents = discord.Intents.all()
     help_command = CustomHelpCommand()
 
-client = pythonBot(intents=pythonBot.intents, command_prefix="_", help_command=pythonBot.help_command)
+client = pythonBot(intents=pythonBot.intents, command_prefix=".", help_command=pythonBot.help_command)
 
 client.persistent_views_added = False
 
@@ -98,6 +98,17 @@ async def on_ready():
         client.add_view(Ticket())
         client.add_view(CloseTicket())
         client.persistent_views_added=True
+
+@client.bridge_command(description="Information about the bot")
+async def about(ctx):
+    total_guilds = len(client.guilds)
+    total_members = sum(guild.member_count for guild in client.guilds)
+    total_shards = client.shard_count
+    embed = discord.Embed(title="About pythonBot", color=discord.Colour.blue())
+    embed.add_field(name="Total Guilds", value=str(total_guilds))
+    embed.add_field(name="Total Members", value=str(total_members))
+    embed.add_field(name="Total Shards", value=str(total_shards))
+    await ctx.respond(embed=embed)
 
 @client.bridge_command(description = "Ping, pong!")
 async def ping(ctx):

@@ -12,7 +12,7 @@ class Automod(commands.Cog):
 
     @automod.command(description="Set up the automod system")
     @bridge.has_permissions(administrator=True)
-    async def enable(Self, ctx):
+    async def enable(self, ctx):
         await ctx.defer()
         try:
             metadata = discord.AutoModActionMetadata("This message was blocked")

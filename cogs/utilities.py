@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands, bridge
 import random
+import math
 
 class Utilities(commands.Cog):
     def __init__(self, bot):
@@ -54,6 +55,43 @@ class Utilities(commands.Cog):
             member = ctx.author
         embed = discord.Embed(title=f"{str(member)}'s avatar:", color=random.randrange(0, 0xffffff))
         embed.set_image(url=member.avatar.url)
+        await ctx.respond(embed=embed)
+
+    # Math Commands (So far we have Addition, Subtraction, Multiplication, Division) (I may add square root and number to the power of)
+    @bridge.bridge_group()
+    async def math(self, ctx):
+        pass
+
+    @math.command(description="Add a number to another number")
+    async def add(self, ctx, firstnumber:int, secondnumber:int):
+        await ctx.respond(f"{firstnumber}+{secondnumber} = {firstnumber+secondnumber}")
+
+    @math.command(description="Subtract a number from another number")
+    async def subtract(self, ctx, firstnumber:int, secondnumber:int):
+        await ctx.respond(f"{firstnumber}-{secondnumber} = {firstnumber-secondnumber}")
+
+    @math.command(description="Multiply a number with another number")
+    async def multiply(self, ctx, firstnumber:int, secondnumber:int):
+        await ctx.respond(f"{firstnumber}x{secondnumber} = {firstnumber*secondnumber}")
+
+    @math.command(description="Divide a number with another number")
+    async def divide(self, ctx, firstnumber:int, secondnumber:int):
+        await ctx.respond(f"{firstnumber}/{secondnumber} = {firstnumber/secondnumber}")
+
+    @bridge.bridge_command(description="Get information about the server")
+    async def serverinfo(self, ctx):
+        id = ctx.guild.id
+        txt = len(ctx.guild.text_channels)
+        vc = len(ctx.guild.voice_channels)
+        time = str(ctx.guild.created_at)
+        owner = ctx.guild.owner
+        embed = discord.Embed(title=f"{ctx.guild.name}")
+        embed.add_field(name="Server Members", value=f"{ctx.guild.member_count}")
+        embed.add_field(name="Server Owner", value=owner)
+        embed.add_field(name="Created at", value=f"{time}")
+        embed.add_field(name="Text Channels", value=f"{txt}")
+        embed.add_field(name="Voice Channels", value=f"{vc}")
+        embed.add_field(name="Server ID", value=f"{id}")
         await ctx.respond(embed=embed)
 
 def setup(bot):
