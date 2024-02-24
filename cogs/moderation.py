@@ -16,18 +16,18 @@ class Moderation(commands.Cog):
                 pass
             else:
                 return await ctx.respond(embed=discord.Embed(title="Failure", description="You can't kick another admin", color=discord.Colour.red()))
+        try:
             try:
-                try:
-                    kickembed = discord.Embed(title="Kick", description=f"You have been kicked from{ctx.guild.name}", color=discord.Colour.red())
-                    await member.send(embed=kickembed)
-                except:
-                    pass
-                await member.kick(reason=reason)
-                embed = discord.Embed(title="Success", description=f"Successfully kicked '{member.name}'", color=discord.Colour.green())
-                await ctx.respond(embed=embed)
+                kickembed = discord.Embed(title="Kick", description=f"You have been kicked from {ctx.guild.name}", color=discord.Colour.red())
+                await member.send(embed=kickembed)
             except:
-                embed = discord.Embed(title="Failure", description=f"Failed to kick '{member.name}'", color=discord.Colour.red())
-                await ctx.respond(embed=embed)
+                pass
+            await member.kick(reason=reason)
+            embed = discord.Embed(title="Success", description=f"Successfully kicked '{member.name}'", color=discord.Colour.green())
+            await ctx.respond(embed=embed)
+        except:
+            embed = discord.Embed(title="Failure", description=f"Failed to kick '{member.name}'", color=discord.Colour.red())
+            await ctx.respond(embed=embed)
 
     # Ban Command
     @bridge.bridge_command(description = "Ban a member")
@@ -39,18 +39,18 @@ class Moderation(commands.Cog):
                 pass
             else:
                 return await ctx.respond(embed=discord.Embed(title="Failure", description="You can't ban another admin", color=discord.Colour.red()))
+        try:
             try:
-                try:
-                    banembed = discord.Embed(title="Kick", description=f"You have been kicked from{ctx.guild.name}", color=discord.Colour.red())
-                    await member.send(embed=banembed)
-                except:
-                    pass
-                await member.ban(reason=reason)
-                embed = discord.Embed(title="Success", description=f"Successfully banned '{member.name}'", color=discord.Colour.green())
-                await ctx.respond(embed=embed)
+                banembed = discord.Embed(title="Kick", description=f"You have been banned from {ctx.guild.name}", color=discord.Colour.red())
+                await member.send(embed=banembed)
             except:
-                embed = discord.Embed(title="Failure", description=f"Failed to ban '{member.name}'", color=discord.Colour.red())
-                await ctx.respond(embed=embed)
+                pass
+            await member.ban(reason=reason)
+            embed = discord.Embed(title="Success", description=f"Successfully banned '{member.name}'", color=discord.Colour.green())
+            await ctx.respond(embed=embed)
+        except:
+            embed = discord.Embed(title="Failure", description=f"Failed to ban '{member.name}'", color=discord.Colour.red())
+            await ctx.respond(embed=embed)
 
     # Timeout Command
     @bridge.bridge_command(description="Timeout another member")
@@ -83,6 +83,24 @@ class Moderation(commands.Cog):
                 return await ctx.respond(f"Messages from {member.mention} has been purged", ephemeral=True)
         await ctx.respond("Purging messages...", ephemeral=True)
         await ctx.channel.purge(limit=amount)
+
+    # Unban Command
+    @bridge.bridge_command(description="Unban a member")
+    async def unban(self, ctx, userid):
+        try:
+            user = await self.bot.fetch_user(int(userid))
+            guild = ctx.guild
+            await guild.unban(user)
+            embed = discord.Embed(title="Success!", description=f"Successfully unbanned member '{user.name}'", color=discord.Colour.green())
+            await ctx.respond(embed=embed, ephemeral=True)
+            try:
+                await user.send(embed=discord.Embed(title="Unbanned", description=f"You have been unbanned from {ctx.guild.name}"), color=discord.Colour.green())
+            except:
+                pass
+        except:
+            embed = discord.Embed(title="Failure", description="Failed to unban member!", color=discord.Colour.red())
+            await ctx.respond(embed=embed, ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
