@@ -23,6 +23,7 @@ class Utilities(commands.Cog):
     async def getuserid(self, ctx, user:discord.User):
         await ctx.respond(f"{user.id}", ephemeral=True)
 
+    # Random Color is Work in progress at the moment.
     @random.command(description="Generate a random color!")
     async def color(self, ctx):
         await ctx.defer()
